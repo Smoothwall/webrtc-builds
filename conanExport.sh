@@ -12,7 +12,7 @@ packageUser="smoothwall"
 packageChannel="testing"
 remoteName="smoothwall"
 
-conan="conan"
+conan="/c/Program Files/Conan/conan/conan.exe"
 builtTypes="Release Debug"
 
 outDir="out"
