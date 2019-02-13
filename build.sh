@@ -134,11 +134,5 @@ echo "$PACKAGE_VERSION $PACKAGE_FILENAME" > "$OUTDIR/package_name.txt"
 
 echo "Packaging WebRTC: $PACKAGE_FILENAME"
 package::prepare $PLATFORM $OUTDIR $PACKAGE_FILENAME $DIR/resource "$CONFIGS" $REVISION_NUMBER
-if [ "$PACKAGE_AS_DEBIAN" = 1 ]; then
-  package::debian $OUTDIR $PACKAGE_FILENAME $PACKAGE_NAME $PACKAGE_VERSION "$(debian-arch $TARGET_CPU)"
-else
-  #package::archive $PLATFORM $OUTDIR $PACKAGE_FILENAME
-  #package::manifest $PLATFORM $OUTDIR $PACKAGE_FILENAME
-fi
 
 echo Build successful
