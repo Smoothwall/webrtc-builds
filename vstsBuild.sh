@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 echo "INFO: VSTSBUILD_DEBUG=$VSTSBUILD_DEBUG"
+echo "INFO: VSTSBUILD_BUILD=$VSTSBUILD_BUILD"
 
-if [ "$VSTSBUILD_DEBUG" != "0" ]
+if [ "$VSTSBUILD_BUILD" != "0" ]
 then
 	echo "Build"
 	./build.sh
