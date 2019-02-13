@@ -3,6 +3,8 @@
 # Purpose: To bundle the output includes/libs from the build.sh command into a conan dependency and upload it to a binary repository
 # Usage: 
 
+echo CONAN_CHANNEL=$CONAN_CHANNEL
+
 conanFile="./conanfile.py"
 projectName="conan-webrtc"
 
