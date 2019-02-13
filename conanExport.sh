@@ -33,7 +33,7 @@ echo "INFO: Exporting conan package: $ref"
 
 for buildType in $builtTypes
 do
-	"$conan" create . "$packageUser/$packageChannel" -s build_type="$buildType"
+#	"$conan" create . "$packageUser/$packageChannel" -s build_type="$buildType"
 
 	[ "$?" != "0" ] && echo "ERROR in conan_create" && exit 1
 	
