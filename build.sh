@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -x
 
 set -o errexit
 set -o nounset
@@ -68,7 +69,6 @@ REPO_URL="https://chromium.googlesource.com/external/webrtc"
 DEPOT_TOOLS_URL="https://chromium.googlesource.com/chromium/tools/depot_tools.git"
 DEPOT_TOOLS_DIR=$DIR/depot_tools
 TOOLS_DIR=$DIR/tools
-PATH=$DEPOT_TOOLS_DIR:$DEPOT_TOOLS_DIR/python276_bin:$PATH
 
 [ "$DEBUG" = 1 ] && set -x
 
@@ -79,9 +79,18 @@ detect-platform
 TARGET_OS=${TARGET_OS:-$PLATFORM}
 TARGET_CPU=${TARGET_CPU:-x64}
 
+if [ "$TARGET_OS" == "mac" ]
+then
+	ENABLE_CLANG=1
+	PATH=$DEPOT_TOOLS_DIR:$DEPOT_TOOLS_DIR/python276_bin:$PATH
+else
+	PATH=$DEPOT_TOOLS_DIR:$DEPOT_TOOLS_DIR/win_tools-2_7_6_bin/python/bin:$PATH
+fi
+
 echo "Host OS: $PLATFORM"
 echo "Target OS: $TARGET_OS"
 echo "Target CPU: $TARGET_CPU"
+echo "ENABLE_CLANG: $ENABLE_CLANG"
 
 echo Checking build environment dependencies
 check::build::env $PLATFORM "$TARGET_CPU"
@@ -120,6 +129,8 @@ compile $PLATFORM $OUTDIR "$TARGET_OS" "$TARGET_CPU" "$CONFIGS" "$BLACKLIST"
 PACKAGE_FILENAME=$(interpret-pattern "$PACKAGE_FILENAME_PATTERN" "$PLATFORM" "$OUTDIR" "$TARGET_OS" "$TARGET_CPU" "$BRANCH" "$REVISION" "$REVISION_NUMBER")
 PACKAGE_NAME=$(interpret-pattern "$PACKAGE_NAME_PATTERN" "$PLATFORM" "$OUTDIR" "$TARGET_OS" "$TARGET_CPU" "$BRANCH" "$REVISION" "$REVISION_NUMBER")
 PACKAGE_VERSION=$(interpret-pattern "$PACKAGE_VERSION_PATTERN" "$PLATFORM" "$OUTDIR" "$TARGET_OS" "$TARGET_CPU" "$BRANCH" "$REVISION" "$REVISION_NUMBER")
+
+echo "$PACKAGE_VERSION $PACKAGE_FILENAME" > "$OUTDIR/package_name.txt"
 
 echo "Packaging WebRTC: $PACKAGE_FILENAME"
 package::prepare $PLATFORM $OUTDIR $PACKAGE_FILENAME $DIR/resource "$CONFIGS" $REVISION_NUMBER

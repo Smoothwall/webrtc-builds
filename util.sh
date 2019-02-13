@@ -74,8 +74,8 @@ function init-msenv() {
   # lack of VS1S0COMNTOOLS environment variable.
   if [ -d "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build" ]; then
     vcvars_path="C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build"
-  elif [ ! -z "$VS140COMNTOOLS" ]; then
-    vcvars_path="${VS140COMNTOOLS}../../VC"
+  elif [ ! -z "$VS150COMNTOOLS" ]; then
+    vcvars_path="${VS150COMNTOOLS}../../VC"
   else
     echo "Building under Microsoft Windows requires Microsoft Visual Studio 2015 Update 3"
     exit 1
@@ -284,7 +284,7 @@ function compile::ninja() {
 #
 # The Microsoft Windows tools have different names than the other tools:
 # 'lib' as the librarian, instead of 'ar'. 'lib' must be found through the path
-# variable $VS140COMNTOOLS.
+# variable $VS150COMNTOOLS.
 #
 # $1: The platform
 # $2: The list of object file paths to be combined
@@ -322,12 +322,12 @@ function combine::objects() {
     # Method 2: Collect all .o files from output directory
     # local objlist=$(find . -name '*.o' | grep -v -E $blacklist)
     # echo "$objlist" >$libname.list
-
+set -x
     # Combine all objects into one static library
     case $platform in
     win)
       # TODO: Support VS 2017
-      "$VS140COMNTOOLS../../VC/bin/lib" /OUT:$libname.lib @$libname.list
+      "lib.exe" /OUT:$libname.lib @$libname.list
       ;;
     *)
       # Combine *.o objects using ar
@@ -354,7 +354,7 @@ function combine::objects() {
 #
 # The Microsoft Windows tools have different names than the other tools:
 # 'lib' as the librarian, instead of 'ar'. 'lib' must be found through the path
-# variable $VS140COMNTOOLS.
+# variable $VS150COMNTOOLS.
 #
 # $1: The platform
 # $2: The list of object file paths to be combined
@@ -380,7 +380,10 @@ function combine::static() {
     case $platform in
     win)
       # TODO: Support VS 2017
-      "$VS140COMNTOOLS../../VC/bin/lib" /OUT:$libname.lib @$libname.list
+	#  echo VS150COMNTOOLS=$VS150COMNTOOLS
+	  #LIB_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\Hostx64\x64\lib.exe"
+	  
+      "lib.exe" /OUT:$libname.lib @$libname.list
       ;;
     *)
       # Combine *.a static libraries
