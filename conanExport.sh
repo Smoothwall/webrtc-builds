@@ -20,6 +20,12 @@ pkgFile="$outDir/package_name.txt"
 packageVersion="1.0.`cat "$pkgFile" | awk {'print $1'}`"
 outputDirName="`cat "$pkgFile" | awk {'print $2'}`"
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$DIR/util.sh"
+
+detect-platform
+TARGET_OS=${TARGET_OS:-$PLATFORM}
+
 export CONAN_FILE_VERSION="$packageVersion"
 ref="$projectName/$packageVersion@$packageUser/$packageChannel"
 
@@ -31,9 +37,9 @@ do
 
 	[ "$?" != "0" ] && echo "ERROR in conan_create" && exit 1
 	
-	if [ "$TARGET_OS" == "Windows" ]; then
+	if [ "$TARGET_OS" == "win" ]; then
 		"$conan" export-pkg "$conanfile" "$ref" -f -s os=Windows -s compiler="Visual Studio" -s compiler.version=15 -s build_type="$buildType"
-	elif [ "$TARGET_OS" == "Macos" ]; then
+	elif [ "$TARGET_OS" == "mac" ]; then
 		"$conan" export-pkg "$conanfile" "$ref" -f -s os=Macos -s compiler="Xcode" -s compiler.version=10.00 -s build_type="$buildType"
 	fi
 	[ "$?" != "0" ] && echo "ERROR in conan_export-pkg" && exit 1
