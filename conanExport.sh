@@ -4,13 +4,14 @@
 # Usage: 
 
 echo "INFO: CONAN_CHANNEL=$CONAN_CHANNEL"
+echo "INFO: CONAN_CHANNEL=$CONAN_CHANNEL"
 
 conanFile="./conanfile.py"
 projectName="conan-webrtc"
 
 packageUser="smoothwall"
-packageChannel="testing"
-remoteName="smoothwall"
+packageChannel="$CONAN_CHANNEL"
+remoteName="$REPO_REMOTE_NAME"
 
 conan="/c/Program Files/Conan/conan/conan.exe"
 builtTypes="Release Debug"
@@ -33,6 +34,7 @@ echo "INFO: Exporting conan package: $ref"
 
 for buildType in $builtTypes
 do
+	echo "INFO: Exporting conan package: $ref - $buildType"
 #	"$conan" create . "$packageUser/$packageChannel" -s build_type="$buildType"
 
 	[ "$?" != "0" ] && echo "ERROR in conan_create" && exit 1
@@ -42,9 +44,11 @@ do
 	elif [ "$TARGET_OS" == "mac" ]; then
 		"$conan" export-pkg "$conanfile" "$ref" -f -s os=Macos -s compiler="Xcode" -s compiler.version=10.00 -s build_type="$buildType"
 	fi
-	[ "$?" != "0" ] && echo "ERROR in conan_export-pkg" && exit 1
+	ret=$?
+	[ "$ret" != "0" ] && echo "ERROR in conan_export-pkg: $ret" && exit 1
 	
 	"$conan" upload "$ref" -c -r="$remoteName" --all --force
-	[ "$?" != "0" ] && echo "ERROR in conan_upload" && exit 1
+	ret=$?
+	[ "$ret" != "0" ] && echo "ERROR in conan_upload: $ret" && exit 1
 	
 done

@@ -72,8 +72,12 @@ function init-msenv() {
 
   # Rudimentary support for VS2017 in default install location due to
   # lack of VS1S0COMNTOOLS environment variable.
-  if [ -d "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build" ]; then
-    vcvars_path="C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build"
+  
+  
+  #"C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build"
+  vcPath="C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/Tools/vsdevcmd/ext"
+  if [ -d "$vcpath" ]; then
+    vcvars_path="$vcPath"
   elif [ ! -z "$VS150COMNTOOLS" ]; then
     vcvars_path="${VS150COMNTOOLS}../../VC"
   else
@@ -85,7 +89,7 @@ function init-msenv() {
   pushd "$vcvars_path" >/dev/null
     OLDIFS=$IFS
     IFS=$'\n'
-    msvars=$(cmd //c "vcvarsall.bat $TARGET_CPU && set")
+    msvars=$(cmd //c "vcvars.bat $TARGET_CPU && set")
 
     for line in $msvars; do
       case $line in

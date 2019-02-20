@@ -5,7 +5,7 @@ echo "INFO: VSTSBUILD_BUILD=$VSTSBUILD_BUILD"
 
 if [ "$VSTSBUILD_BUILD" != "0" ]
 then
-	echo "Build"
+	echo "Run build.sh"
 	./build.sh
 	[ "$?" != "0" ] && echo "ERROR in conan_build" && exit 1
 fi
