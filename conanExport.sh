@@ -4,7 +4,7 @@
 # Usage: 
 
 echo "INFO: CONAN_CHANNEL=$CONAN_CHANNEL"
-echo "INFO: CONAN_CHANNEL=$CONAN_CHANNEL"
+echo "INFO: REPO_REMOTE_NAME=$REPO_REMOTE_NAME"
 
 conanFile="./conanfile.py"
 projectName="conan-webrtc"
@@ -52,3 +52,5 @@ do
 	[ "$ret" != "0" ] && echo "ERROR in conan_upload: $ret" && exit 1
 	
 done
+
+exit 0

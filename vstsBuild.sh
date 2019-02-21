@@ -3,6 +3,8 @@
 echo "INFO: VSTSBUILD_DEBUG=$VSTSBUILD_DEBUG"
 echo "INFO: VSTSBUILD_BUILD=$VSTSBUILD_BUILD"
 
+[ "$VSTSBUILD_DEBUG" == "1" ] && set -x
+
 ucgoCmd="./tools/ucgo.sh"
 buildCmd="./tools/build.sh"
 
@@ -50,10 +52,9 @@ StartBashProcess "prepare" "$ucgoCmd" "prepare" # Setup code, e.g set repo git h
 if [ "$VSTSBUILD_BUILD" != "0" ]
 then
 	echo "INFO: Run build.sh from the original upstream repo"
-	StartBashProcess "build" "./build.sh"  # run upstream build.sh
+	StartBashProcess "build" "./build.sh" # run upstream build.sh
 fi
 
 echo "INFO: Conan export"
-StartBashProcess "build" "./conanExport.sh"  # export output to conan repo
-
-
+StartBashProcess "export" "./conanExport.sh" # export output to conan repo
+exit 0;
