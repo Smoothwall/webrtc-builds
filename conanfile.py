@@ -18,13 +18,18 @@ class WebRtcConan(ConanFile):
 	settings = "os", "compiler", "build_type", "arch"
 
 	def package(self):
-		if str(self.settings.build_type) == "debug":
+		
+		settingsBuildType = str(self.settings.build_type);
+		
+		print("INFO: settingsBuildType" + settingsBuildType)
+		
+		if settingsBuildType == "debug":
 			bin_src_type = "Debug"
 		else:
 			bin_src_type = "Release"
 		
-		print("version: " + self.version)
-		print("build_type: " + bin_src_type)
+		print("INFO: version: " + self.version)
+		print("INFO: build src folder: " + bin_src_type)
 				
 		# input: 26639 webrtc-26624-1a1c52b-win-x64 -> output: webrtc-26624-1a1c52b-win-x64
 		package_name = tools.load(self.source_folder + "/out/package_name.txt").rstrip().split(' ')[1] 
@@ -32,13 +37,13 @@ class WebRtcConan(ConanFile):
 		src_root = self.source_folder + "/out/" + package_name
 		lib_search_path = src_root + "/lib/x64/" + bin_src_type + "/"
 		
-		print("Process includes... " + src_root)
+		print("INFO: Process includes in: " + src_root)
 		
 		self.copy("*.h", dst="include", src=src_root + "/include")
 		self.copy("*.hpp", dst="include", src=src_root + "/include")
 		self.copy("*.hxx", dst="include", src=src_root + "/include")
 		
-		print("Process libs, lib_search_path = " + lib_search_path)
+		print("INFO: Process libs, lib_search_path: " + lib_search_path)
 		
 		self.copy("*.lib", dst="lib", src=lib_search_path, keep_path=False)
 		

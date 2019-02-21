@@ -6,6 +6,8 @@
 echo "INFO: CONAN_CHANNEL=$CONAN_CHANNEL"
 echo "INFO: REPO_REMOTE_NAME=$REPO_REMOTE_NAME"
 
+[ "$VSTSBUILD_DEBUG" == "1" ] && set -x
+
 conanFile="./conanfile.py"
 projectName="conan-webrtc"
 
