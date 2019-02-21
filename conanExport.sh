@@ -14,7 +14,7 @@ packageChannel="$CONAN_CHANNEL"
 remoteName="$REPO_REMOTE_NAME"
 
 conan="/c/Program Files/Conan/conan/conan.exe"
-builtTypes="Release Debug"
+builtTypes="release debug"
 
 outDir="out"
 pkgFile="$outDir/package_name.txt"
