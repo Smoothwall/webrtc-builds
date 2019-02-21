@@ -74,22 +74,23 @@ function init-msenv() {
   # lack of VS1S0COMNTOOLS environment variable.
   
   
-  #"C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build"
-  vcPath="C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/Tools/vsdevcmd/ext"
-  if [ -d "$vcpath" ]; then
-    vcvars_path="$vcPath"
-  elif [ ! -z "$VS150COMNTOOLS" ]; then
-    vcvars_path="${VS150COMNTOOLS}../../VC"
+  vcPathCommunity="C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build"
+  vcPathProfessional="C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/VC/Auxiliary/Build"
+  
+  if [ -d "$vcPathCommunity" ]; then
+    vcvars_path="$vcPathCommunity"
+  elif [ -d "$vcPathProfessional" ]; then
+    vcvars_path="$vcPathProfessional"
   else
-    echo "Building under Microsoft Windows requires Microsoft Visual Studio 2015 Update 3"
-    exit 1
+    echo "ERROR: Unable to ascertain VisualStudio vcvarsall.bat location"
+    exit 2
   fi
-
+  
   export DEPOT_TOOLS_WIN_TOOLCHAIN=0
   pushd "$vcvars_path" >/dev/null
     OLDIFS=$IFS
     IFS=$'\n'
-    msvars=$(cmd //c "vcvars.bat $TARGET_CPU && set")
+    msvars=$(cmd //c "vcvarsall.bat $TARGET_CPU && set")
 
     for line in $msvars; do
       case $line in

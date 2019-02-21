@@ -2,6 +2,7 @@
 
 echo "INFO: VSTSBUILD_DEBUG=$VSTSBUILD_DEBUG"
 echo "INFO: VSTSBUILD_BUILD=$VSTSBUILD_BUILD"
+echo "INFO: VSTSBUILD_SETUP=$VSTSBUILD_SETUP"
 
 [ "$VSTSBUILD_DEBUG" == "1" ] && set -x
 
@@ -46,8 +47,11 @@ function StartBashProcess {
    ReturnCodeCheck "$alias" "$?" "$expectedRc"
 }
 
-StartBashProcess "setupBuild" "$ucgoCmd" "setupBuild" # Setup conan remote/API key and hooks
-StartBashProcess "prepare" "$ucgoCmd" "prepare" # Setup code, e.g set repo git hooks
+if [ "$VSTSBUILD_SETUP" != "0" ]
+then
+	StartBashProcess "setupBuild" "$ucgoCmd" "setupBuild" # Setup conan remote/API key and hooks
+	StartBashProcess "prepare" "$ucgoCmd" "prepare" # Setup code, e.g set repo git hooks
+fi
 
 if [ "$VSTSBUILD_BUILD" != "0" ]
 then
