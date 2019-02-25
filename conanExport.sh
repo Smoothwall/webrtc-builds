@@ -15,7 +15,6 @@ packageUser="smoothwall"
 packageChannel="$CONAN_CHANNEL"
 remoteName="$REPO_REMOTE_NAME"
 
-conan="/c/Program Files/Conan/conan/conan.exe"
 builtTypes="release debug"
 
 outDir="out"
@@ -28,6 +27,13 @@ source "$DIR/util.sh"
 
 detect-platform
 TARGET_OS=${TARGET_OS:-$PLATFORM}
+
+if [ "$TARGET_OS" == "win" ]
+then
+	conan="/c/Program Files/Conan/conan/conan.exe"
+else
+	conan="conan"
+fi
 
 export CONAN_FILE_VERSION="$packageVersion"
 ref="$projectName/$packageVersion@$packageUser/$packageChannel"
