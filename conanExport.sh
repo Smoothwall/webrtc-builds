@@ -27,6 +27,7 @@ source "$DIR/util.sh"
 
 detect-platform
 TARGET_OS=${TARGET_OS:-$PLATFORM}
+echo "INFO: TARGET_OS=$TARGET_OS"
 
 if [ "$TARGET_OS" == "win" ]
 then
